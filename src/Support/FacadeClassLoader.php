@@ -6,7 +6,6 @@ namespace LaravelPackageManager\Support;
  * Load a file that contains a laravel facade, and replace the classname with a random
  * classname, then load the resulting code and call the getFacadeAccessor() method to
  * reliably determine the Facade's actual name.
- *
  */
 class FacadeClassLoader
 {
@@ -21,23 +20,24 @@ class FacadeClassLoader
      * Returns false on error.
      * @param string $filename
      * @param string $isContent
-     * @return boolean|string
+     * @return bool|string
      */
     //public function load($filename, $isContent = false)
     public function load($filename, $content = null)
     {
-        switch(is_string($content)) {
+        switch (is_string($content)) {
             case true:
                 $contents = $content;
                 break;
             default:
-                if (!file_exists($filename)) {
+                if (! file_exists($filename)) {
                     return false;
                 }
         }
 
-        if (strlen($contents)==0)
+        if (strlen($contents) == 0) {
             $contents = file_get_contents($filename);
+        }
 
         $loaderClassname = $this->getLoaderClassname();
         $loaderfn = $this->getLoaderFilename($loaderClassname);
@@ -46,9 +46,9 @@ class FacadeClassLoader
         $this->writeDataToTempFile($loaderfn, $contents);
 
         try {
-            include_once($loaderfn);
+            include_once $loaderfn;
             $facadeName = $loaderClassname::getFacadeName();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         } finally {
             $this->cleanup();
@@ -56,7 +56,6 @@ class FacadeClassLoader
 
         return ucfirst($facadeName);
     }
-
 
     /**
      * Refreshes the class loader.  Required when using the same class loader multiple times,
@@ -67,19 +66,21 @@ class FacadeClassLoader
     public function refresh()
     {
         $this->getLoaderClassname(true);
+
         return $this;
     }
 
     /**
-     * Write data to a temp file
+     * Write data to a temp file.
      * @param string $filename
      * @param string $data
      * @return \LaravelPackageManager\Support\FacadeClassLoader
      */
     protected function writeDataToTempFile($filename, $data)
     {
-        if (!in_array($filename, $this->tempFiles))
+        if (! in_array($filename, $this->tempFiles)) {
             $this->tempFiles[] = $filename;
+        }
         file_put_contents($filename, $data);
 
         return $this;
@@ -116,8 +117,9 @@ class FacadeClassLoader
     protected function getLoaderClassname($refresh = false)
     {
         static $classname = '';
-        if ($classname == '' || $refresh === true)
+        if ($classname == '' || $refresh === true) {
             $classname = (new \ReflectionClass($this))->getShortName().sha1(mt_rand(1, 999999999));
+        }
 
         return $classname;
     }
@@ -129,7 +131,7 @@ class FacadeClassLoader
      */
     protected function getLoaderFilename($classname)
     {
-        return $classname.".laravel-require.facade-loader.php";
+        return $classname.'.laravel-require.facade-loader.php';
     }
 
     /**
@@ -138,12 +140,13 @@ class FacadeClassLoader
      */
     protected function cleanup()
     {
-        foreach($this->tempFiles as $file) {
-            if (file_exists($file))
-               unlink($file);
+        foreach ($this->tempFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
         }
         $this->tempFiles = [];
+
         return $this;
     }
-
 }

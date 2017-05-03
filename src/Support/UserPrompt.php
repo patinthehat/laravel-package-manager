@@ -2,19 +2,15 @@
 
 namespace LaravelPackageManager\Support;
 
-use LaravelPackageManager\Support\ItemInformation;
-use LaravelPackageManager\Support\Output;
-
 class UserPrompt
 {
-
     /**
      * @var \LaravelPackageManager\Support\Output
      */
     protected $output = null;
 
     /**
-     * Constructor
+     * Constructor.
      * @param Output $output
      * @return void
      */
@@ -33,8 +29,9 @@ class UserPrompt
         switch ($info->type) {
             case ItemInformation::FACADE:
             case ItemInformation::SERVICE_PROVIDER:
-                if ($this->output->confirm("Register ".$info->displayName()." '".$info->name."'?")) {
+                if ($this->output->confirm('Register '.$info->displayName()." '".$info->name."'?")) {
                     $this->output->info('Registering '.$info->displayName().'...');
+
                     return true;
                 }
                 $this->output->comment('Skipping registration of '.$info->displayName().' \''.$info->name.'\'.');
@@ -46,15 +43,16 @@ class UserPrompt
     /**
      * Ask the user if they want to unregister a service provider or facade.
      * @param \LaravelPackageManager\Support\ItemInformation $info
-     * @return boolean
+     * @return bool
      */
     public function promptToUnregister(ItemInformation $info)
     {
         switch ($info->type) {
             case ItemInformation::FACADE:
             case ItemInformation::SERVICE_PROVIDER:
-                if ($this->output->confirm("Unregister ".$info->displayName()." '".$info->name."'?")) {
+                if ($this->output->confirm('Unregister '.$info->displayName()." '".$info->name."'?")) {
                     $this->output->info('Unregistering '.$info->displayName().'...');
+
                     return true;
                 }
                 $this->output->comment('Skipping unregistration of '.$info->displayName().' \''.$info->name.'\'.');
@@ -62,5 +60,4 @@ class UserPrompt
 
         return false;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace LaravelPackageManager\Packages;
 
-
 use LaravelPackageManager\Packages\Files\PackageFileLocator;
 use LaravelPackageManager\Exceptions\InvalidPackageNameException;
 use LaravelPackageManager\Exceptions\PackageDirectoryNotFoundException;
@@ -10,13 +9,11 @@ use LaravelPackageManager\Exceptions\PackageDirectoryNotFoundException;
 class Package
 {
     /**
-     *
      * @var string
      */
     protected $name;
 
     /**
-     *
      * @var string|null
      */
     protected $version = null;
@@ -27,7 +24,6 @@ class Package
     protected $files = [];
 
     /**
-     *
      * @var \LaravelPackageManager\Packages\Files\PackageFileLocator
      */
     protected $locator;
@@ -40,7 +36,7 @@ class Package
     public function __construct($name)
     {
         $this->name = strtolower(trim($name));
-        if (strpos($this->name,':')!==false) {
+        if (strpos($this->name, ':') !== false) {
             $parts = explode(':', $this->name);
             $this->name = $parts[0];
             $this->version = $parts[1];
@@ -52,7 +48,7 @@ class Package
 
     /**
      * Check to see if the current package has already been installed.
-     * @return boolean
+     * @return bool
      */
     public function isInstalled()
     {
@@ -69,7 +65,7 @@ class Package
     /**
      * Validates a package name, expecting format "vendorname/packagename".
      * @throws \LaravelPackageManager\Exceptions\InvalidPackageNameException
-     * @return boolean
+     * @return bool
      */
     protected function validateName()
     {
@@ -85,12 +81,12 @@ class Package
     /**
      * Validate the path the package is expected to reside in.
      * @throws \LaravelPackageManager\Exceptions\PackageDirectoryNotFoundException
-     * @return boolean
+     * @return bool
      */
     public function validatePath()
     {
         $path = $this->getPath();
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             throw new PackageDirectoryNotFoundException("Package directory not found: $path");
             return false;
         }
@@ -124,5 +120,4 @@ class Package
     {
         return base_path().'/vendor/'.$this->getName();
     }
-
 }

@@ -3,10 +3,9 @@
 namespace LaravelPackageManager\Packages\Files;
 
 use LaravelPackageManager\Support\ItemInformation;
-use LaravelPackageManager\Packages\Files\PackageFileList;
-use LaravelPackageManager\Packages\Files\Scanner\Rules\PackageFileScannerRuleContract;
 use LaravelPackageManager\Packages\Files\Scanner\Rules\FacadeScannerRule;
 use LaravelPackageManager\Packages\Files\Scanner\Rules\ServiceProviderScannerRule;
+use LaravelPackageManager\Packages\Files\Scanner\Rules\PackageFileScannerRuleContract;
 
 class PackageFileClassifier
 {
@@ -16,15 +15,16 @@ class PackageFileClassifier
      * Classifies a file using the specified rule.
      * @param string $filename
      * @param PackageFileScannerRuleContract $rule
-     * @return integer
+     * @return int
      */
     public function classifyFile($filename, PackageFileScannerRuleContract $rule)
     {
         $data = file_get_contents($filename);
 
         $result = ($rule->matchByFilename($filename) || $rule->matchBySourcecode($data));
-        if ($result)
+        if ($result) {
             return $rule->matchType();
+        }
 
         return ItemInformation::UNKNOWN;
     }
@@ -36,7 +36,7 @@ class PackageFileClassifier
      */
     public function classifyFiles(PackageFileList $list)
     {
-        foreach($list as $file) {
+        foreach ($list as $file) {
             $ii = new ItemInformation;
             $ii->filename = $file->getPathname();
             $rule = new FacadeScannerRule;
@@ -59,8 +59,9 @@ class PackageFileClassifier
                 $ii->type = $rule->matchType();
             }
 
-            if ($ii->type != ItemInformation::UNKNOWN)
+            if ($ii->type != ItemInformation::UNKNOWN) {
                 $this->files[$file->getPathname()] = $ii;
+            }
         }
 
         return $this;
@@ -74,5 +75,4 @@ class PackageFileClassifier
     {
         return $this->files;
     }
-
 }

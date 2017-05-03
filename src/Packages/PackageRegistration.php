@@ -3,10 +3,8 @@
 namespace LaravelPackageManager\Packages;
 
 use Illuminate\Console\Command;
-use LaravelPackageManager\Packages\Package;
-use LaravelPackageManager\Support\ItemInformation;
-use LaravelPackageManager\Support\Output;
 use LaravelPackageManager\Support\UserPrompt;
+use LaravelPackageManager\Support\ItemInformation;
 use LaravelPackageManager\Support\ConfigurationFile;
 
 class PackageRegistration
@@ -30,19 +28,21 @@ class PackageRegistration
     {
         $package = $package;
         $searchLine = null;
-        switch($info->type) {
+        switch ($info->type) {
             case ItemInformation::FACADE:
                 $searchLine = "'aliases' => [";
 
             case ItemInformation::SERVICE_PROVIDER:
-                if (strlen($searchLine)==0)
+                if (strlen($searchLine) == 0) {
                     $searchLine = 'LaravelPackageManager\\LaravelPackageManagerServiceProvider::class,';
+                }
 
                 $install = $this->prompt->promptToInstall($info);
                 break;
 
             default:
                 $this->command->comment('Unknown package type.  This is probably not a Laravel package.');
+
                 return false;
         }
 
@@ -50,16 +50,18 @@ class PackageRegistration
             $regline = $this->generateRegistrationLine($info);
 
             $config = $this->config->read();
-            if (strpos($config, $regline)!==false) {
-                $this->command->comment($info->displayName() ."'".$info->name."' is already registered.");
+            if (strpos($config, $regline) !== false) {
+                $this->command->comment($info->displayName()."'".$info->name."' is already registered.");
+
                 return true;
             }
 
             $count = 0;
-            $config = str_replace($searchLine, $searchLine . PHP_EOL . "        $regline", $config, $count);
+            $config = str_replace($searchLine, $searchLine.PHP_EOL."        $regline", $config, $count);
 
             if ($count > 0) {
                 $this->config->write($config);
+
                 return true;
             }
         }
@@ -71,7 +73,7 @@ class PackageRegistration
     {
         $package = $package;
         $searchLine = null;
-        switch($info->type) {
+        switch ($info->type) {
             case ItemInformation::FACADE:
             case ItemInformation::SERVICE_PROVIDER:
                 $unregister = $this->prompt->promptToUnregister($info);
@@ -79,6 +81,7 @@ class PackageRegistration
 
             default:
                 $this->command->comment('Unknown package type.  This is probably not a Laravel package.');
+
                 return false;
         }
 
@@ -86,8 +89,9 @@ class PackageRegistration
             $regline = $this->generateRegistrationLine($info);
 
             $config = $this->config->read();
-            if (strpos($config, $regline)===false) {
-                $this->command->comment($info->displayName() ."'".$info->name."' is not registered.");
+            if (strpos($config, $regline) === false) {
+                $this->command->comment($info->displayName()."'".$info->name."' is not registered.");
+
                 return false;
             }
 
@@ -96,6 +100,7 @@ class PackageRegistration
 
             if ($count > 0) {
                 $this->config->write($config);
+
                 return true;
             }
         }
@@ -111,11 +116,12 @@ class PackageRegistration
     public function registerAll(Package $package, array $infos)
     {
         $result = true;
-        foreach($infos as $info) {
-            if (!$this->register($package, $info)) {
+        foreach ($infos as $info) {
+            if (! $this->register($package, $info)) {
                 $result = false;
             }
         }
+
         return $result;
     }
 
@@ -127,11 +133,12 @@ class PackageRegistration
     public function unregisterAll(Package $package, array $infos)
     {
         $result = true;
-        foreach($infos as $info) {
-            if (!$this->unregister($package, $info)) {
+        foreach ($infos as $info) {
+            if (! $this->unregister($package, $info)) {
                 $result = false;
             }
         }
+
         return $result;
     }
 
@@ -145,15 +152,13 @@ class PackageRegistration
     {
         switch ($item->type) {
             case ItemInformation::SERVICE_PROVIDER:
-                return $item->namespace . "\\" . $item->classname . "::class,";
+                return $item->namespace.'\\'.$item->classname.'::class,';
 
             case ItemInformation::FACADE:
-                return "'" . (strlen($item->name) > 0 ? $item->name : $item->classname) . "' => " . $item->namespace . '\\' . $item->classname . "::class,";
+                return "'".(strlen($item->name) > 0 ? $item->name : $item->classname)."' => ".$item->namespace.'\\'.$item->classname.'::class,';
 
             default:
                 return '';
         }
     }
-
 }
-

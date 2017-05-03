@@ -5,33 +5,31 @@ namespace LaravelPackageManager\Support;
 /**
  * Handles basic regular expression manipulations.
  */
-
 class RegEx
 {
-
     /**
      * Checks to see if filter is a basic '(keyword)' regular expression.
      * @param string $filter
-     * @return boolean
+     * @return bool
      */
     protected function isBasicCapture($filter)
     {
-        return (starts_with($filter, '(') && ends_with($filter, ')'));
+        return starts_with($filter, '(') && ends_with($filter, ')');
     }
 
     /**
      * Check to see if $filter is a simple match like '(one|two|three)'.
      * @param string $filter
-     * @return boolean
+     * @return bool
      */
     protected function isBasicCaptureWithPipes($filter)
     {
-        return ($this->isBasicCapture($filter) && strpos($filter, '|') !== false);
+        return $this->isBasicCapture($filter) && strpos($filter, '|') !== false;
     }
 
     /**
      * Strip off the leading and trailing characters from $filter.
-     * TODO this is too similar to getFilterExpressionOnly, consider merging into one method
+     * TODO this is too similar to getFilterExpressionOnly, consider merging into one method.
      * @param string $filter
      * @return string
      */
@@ -55,11 +53,12 @@ class RegEx
         foreach ($filters as $filter) {
             $expression = $this->getFilterExpressionOnly($filter);
 
-            if ($this->isBasicCaptureWithPipes($expression))
+            if ($this->isBasicCaptureWithPipes($expression)) {
                 $expression = $this->removeBasicCaptureChars($expression);
+            }
             $parts[] = $expression;
         }
-        $result = '/(' . implode('|', $parts) . ')/';
+        $result = '/('.implode('|', $parts).')/';
 
         return $result;
     }
@@ -72,8 +71,9 @@ class RegEx
      */
     protected function getFilterExpressionOnly($filter)
     {
-        if (!$this->isRegularExpression($filter))
+        if (! $this->isRegularExpression($filter)) {
             return $filter;
+        }
 
         return substr($filter, 1, strlen($filter) - 2);
     }
@@ -82,17 +82,17 @@ class RegEx
      * Checks to see if $filter is a regular expression filter,
      * or just a simple text match filter.
      * @param string $filter
-     * @return boolean
+     * @return bool
      */
     public function isRegularExpression($filter)
     {
-        if (strlen($filter) <= 2)
+        if (strlen($filter) <= 2) {
             return false;
+        }
 
         $firstchar = $filter[0];
         $lastchar = $filter[strlen($filter) - 1];
 
-        return (($firstchar == '/') && ($firstchar == $lastchar));
+        return ($firstchar == '/') && ($firstchar == $lastchar);
     }
-
 }

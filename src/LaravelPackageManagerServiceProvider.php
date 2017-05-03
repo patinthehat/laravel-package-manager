@@ -3,7 +3,6 @@
 namespace LaravelPackageManager;
 
 use Illuminate\Support\ServiceProvider;
-use LaravelPackageManager\Console\Commands\RequirePackageCommand;
 
 class LaravelPackageManagerServiceProvider extends ServiceProvider
 {
@@ -48,5 +47,4 @@ class LaravelPackageManagerServiceProvider extends ServiceProvider
           \LaravelPackageManager\Console\Commands\UnregisterPackageCommand::class,
         ]);
     }
-
 }

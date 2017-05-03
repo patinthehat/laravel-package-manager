@@ -4,7 +4,6 @@ namespace LaravelPackageManager\Support;
 
 class ItemInformation
 {
-
     const UNDEFINED = 0;
     const UNKNOWN = 0;
     const FACADE = 1;
@@ -30,40 +29,41 @@ class ItemInformation
     }
 
     /**
-     * Convert a type into a string
+     * Convert a type into a string.
      * @return string
      */
     public function displayName()
     {
-        switch($this->type) {
+        switch ($this->type) {
             case self::SERVICE_PROVIDER:
                 return 'Service Provier';
             case self::FACADE:
                 return 'Facade';
             default:
-                return "Unknown";
+                return 'Unknown';
         }
     }
 
     /**
-     * Get the fully-qualified classname
+     * Get the fully-qualified classname.
      *
      * @return string
      */
     public function qualifiedName()
     {
-        return $this->namespace . '\\' . $this->classname;
+        return $this->namespace.'\\'.$this->classname;
     }
 
     public function __call($name, $params)
     {
         if (isset($this->$name)) {
-            if (count($params)>0) {
+            if (count($params) > 0) {
                 $this->$name = $params[0];
+
                 return $this;
             }
+
             return $this->$name;
         }
     }
-
 }

@@ -8,12 +8,13 @@ class CommandOptions
 
     public function __construct(array $options)
     {
-        if (count($options)>0)
+        if (count($options) > 0) {
             $this->options = $options;
+        }
     }
 
     /**
-     * Add an option to the list
+     * Add an option to the list.
      * @param string $name
      */
     public function add($name)
@@ -39,9 +40,9 @@ class CommandOptions
     }
 
     /**
-     * Check if $name exists in options
+     * Check if $name exists in options.
      * @param string $name
-     * @return boolean
+     * @return bool
      */
     public function hasOption($name)
     {
@@ -59,9 +60,9 @@ class CommandOptions
     }
 
     /**
-     * Check to see if $name exists in options
+     * Check to see if $name exists in options.
      * @param unknown $name
-     * @return boolean
+     * @return bool
      */
     public function has($name)
     {
@@ -69,7 +70,7 @@ class CommandOptions
     }
 
     /**
-     * Get the value of option $name
+     * Get the value of option $name.
      * @param unknown $name
      * @return mixed
      */
@@ -78,6 +79,7 @@ class CommandOptions
         if (is_null($this->options[$name])) {
             return false;
         }
+
         return $this->options[$name];
     }
 }

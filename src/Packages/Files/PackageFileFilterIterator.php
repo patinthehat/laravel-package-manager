@@ -6,42 +6,36 @@ use LaravelPackageManager\Support\RegEx;
 
 class PackageFileFilterIterator extends \RecursiveFilterIterator
 {
-
     /**
-     *
      * @var string
      */
     public static $compiledRejectFilter = '';
 
     /**
-     *
      * @var string
      */
-    public static $rejectFilters = array(
+    public static $rejectFilters = [
         '/(CHANGES|LICENSE|README|VERSION)/',
         '/(tests|test|views|node_modules)/',
         '/^\.git(ignore|keep|attributes)?/',
         '/.*\.(exe|zip|tar|gz|bz2|xml|md|js|json|yml|txt|js|php_cs|editorconfig|dist)$/',
-        '/[A-Za-z0-9_]+(Interface|Exception|Test|\.blade)\.php$/'
-    );
+        '/[A-Za-z0-9_]+(Interface|Exception|Test|\.blade)\.php$/',
+    ];
 
     /**
-     *
      * @var string
      */
     public static $compiledAcceptFilter = '';
 
     /**
-     *
      * @var array
      */
     public static $acceptFilters = [
         '/src/',
-        '/\.php/'
+        '/\.php/',
     ];
 
     /**
-     *
      * @var \LaravelPackageManager\Support\Regex
      */
     protected $regex;
@@ -52,19 +46,22 @@ class PackageFileFilterIterator extends \RecursiveFilterIterator
 
         $this->regex = new RegEx();
         // compile all of the filters into one regular expression
-        if (self::$compiledRejectFilter == '')
+        if (self::$compiledRejectFilter == '') {
             self::$compiledRejectFilter = $this->regex->compileFiltersToRegEx(self::$rejectFilters);
+        }
 
-        if (self::$compiledAcceptFilter == '')
+        if (self::$compiledAcceptFilter == '') {
             self::$compiledAcceptFilter = $this->regex->compileFiltersToRegEx(self::$acceptFilters);
+        }
     }
 
     protected function matches($filename, $filter)
     {
-        if ($this->regex->isRegularExpression($filter))
-            return (preg_match($filter, $filename) == 1); // filter is a regular
+        if ($this->regex->isRegularExpression($filter)) {
+            return preg_match($filter, $filename) == 1;
+        } // filter is a regular
                                                         // expression
-        return ($filename == $filter); // filter requires an exact match
+        return $filename == $filter; // filter requires an exact match
     }
 
     /**
@@ -72,13 +69,12 @@ class PackageFileFilterIterator extends \RecursiveFilterIterator
      * generated
      * upon class creation.
      *
-     * @return boolean
+     * @return bool
      */
     public function accept()
     {
         $filename = $this->current()->getFilename();
 
-        return !$this->matches($filename, self::$compiledRejectFilter);
+        return ! $this->matches($filename, self::$compiledRejectFilter);
     }
-
 }

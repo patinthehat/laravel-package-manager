@@ -4,15 +4,15 @@ namespace LaravelPackageManager\Packages\Files\Scanner\Rules;
 
 interface PackageFileScannerRuleContract
 {
-   /**
+    /**
     * @param string $code
-    * @return boolean
+    * @return bool
     */
    public function matchByFilename($filename);
 
    /**
     * @param string $code
-    * @return boolean
+    * @return bool
     */
    public function matchBySourcecode($code);
 
@@ -23,7 +23,7 @@ interface PackageFileScannerRuleContract
    public function getInformationFromSourcecode($code);
 
    /**
-    * @return integer
+    * @return int
     */
    public function matchType();
 }

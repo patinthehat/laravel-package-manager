@@ -3,16 +3,12 @@
 namespace LaravelPackageManager\Console\Commands;
 
 use Illuminate\Console\Command;
+use LaravelPackageManager\Support\Output;
 use LaravelPackageManager\Packages\Package;
-use LaravelPackageManager\Packages\PackageInstaller;
+use LaravelPackageManager\Support\UserPrompt;
+use LaravelPackageManager\Packages\PackageRegistration;
 use LaravelPackageManager\Packages\Files\PackageFileLocator;
 use LaravelPackageManager\Packages\Files\PackageFileClassifier;
-use LaravelPackageManager\Support\ItemInformation;
-use LaravelPackageManager\Packages\Files\Scanner\Rules\FacadeScannerRule;
-use LaravelPackageManager\Packages\PackageRegistration;
-use LaravelPackageManager\Support\Output;
-use LaravelPackageManager\Support\UserPrompt;
-use LaravelPackageManager\Support\CommandOptions;
 
 class UnregisterPackageCommand extends Command
 {
