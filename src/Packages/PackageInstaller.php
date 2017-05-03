@@ -2,7 +2,6 @@
 
 namespace LaravelPackageManager\Packages;
 
-use LaravelPackageManager\Packages\Package;
 use LaravelPackageManager\Support\RunExternalCommand;
 
 class PackageInstaller
@@ -15,16 +14,18 @@ class PackageInstaller
     public function install(Package $package, $InstallAsDev = false)
     {
         $cmd = $this->findComposerBinary().' require '.$package->getName();
-        if ($package->getVersion())
+        if ($package->getVersion()) {
             $cmd .= ':'.$package->getVersion();
-        if ($InstallAsDev)
+        }
+        if ($InstallAsDev) {
             $cmd .= ' --dev';
+        }
 
         $runner = new RunExternalCommand($cmd);
         try {
             $runner->run();
         } catch (Exception $e) {
-           echo 'Error: '.$e->getMessage().PHP_EOL;
+            echo 'Error: '.$e->getMessage().PHP_EOL;
         }
     }
 
@@ -35,11 +36,10 @@ class PackageInstaller
      */
     protected function findComposerBinary()
     {
-        if (file_exists(base_path() . '/composer.phar')) {
-            return '"' . PHP_BINARY . '" composer.phar';
+        if (file_exists(base_path().'/composer.phar')) {
+            return '"'.PHP_BINARY.'" composer.phar';
         }
 
         return 'composer';
     }
-
 }

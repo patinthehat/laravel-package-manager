@@ -3,21 +3,15 @@
 namespace LaravelPackageManager\Packages;
 
 use Illuminate\Console\Command;
-use LaravelPackageManager\Packages\Package;
-use LaravelPackageManager\Packages\PackageInstaller;
-use LaravelPackageManager\Packages\Files\PackageFileLocator;
-use LaravelPackageManager\Packages\Files\PackageFileClassifier;
-use LaravelPackageManager\Support\ItemInformation;
-use LaravelPackageManager\Packages\Files\Scanner\Rules\FacadeScannerRule;
-use LaravelPackageManager\Packages\PackageRegistration;
 use LaravelPackageManager\Support\Output;
 use LaravelPackageManager\Support\UserPrompt;
 use LaravelPackageManager\Support\CommandOptions;
+use LaravelPackageManager\Packages\Files\PackageFileLocator;
+use LaravelPackageManager\Packages\Files\PackageFileClassifier;
 
 class PackageRequirer
 {
     /**
-     *
      * @var \LaravelPackageManager\Support\Output
      */
     protected $output;
@@ -53,7 +47,7 @@ class PackageRequirer
     public function require($packageName, array $options)
     {
         $package = new Package($packageName);
-        if (!$package->isInstalled() || !$options['register-only']) { // (is_null($options['register-only']) || $options['register-only'] == false)) {
+        if (! $package->isInstalled() || ! $options['register-only']) { // (is_null($options['register-only']) || $options['register-only'] == false)) {
             $installer = new PackageInstaller;
             $installer->install($package, $this->options->hasOption('dev')); // in_array('dev', $options));
         }

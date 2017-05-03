@@ -3,18 +3,13 @@
 namespace LaravelPackageManager\Packages\Files;
 
 use LaravelPackageManager\Packages\Package;
-use LaravelPackageManager\Packages\Files\PackageFileFilterIterator;
-use LaravelPackageManager\Exceptions\PackageDirectoryNotFoundException;
-use LaravelPackageManager\Packages\Files\PackageFileList;
 
 
 /**
  * Handles the locating of files that might contain a service provider or facade.
- *
  */
 class PackageFileLocator
 {
-
     /**
      * @var \LaravelPackageManager\Packages\Package
      */
@@ -31,7 +26,7 @@ class PackageFileLocator
     /**
      * Recursively scan the package's directory for all files, using a filter
      * to strip out files we know won't have a service provider or Facade.
-     * @param boolean $prioritization - prioritizes files that are most likely
+     * @param bool $prioritization - prioritizes files that are most likely
      *  to contain SPs or Facades to the top of the resulting array.
      * @return \LaravelPackageManager\Packages\Files\PackageFileList
      */
@@ -57,20 +52,23 @@ class PackageFileLocator
         //only allow php files with a filesize > 0
         //TODO Implement FilenameFilter class here
         foreach ($iterator as $file) {
-            if (!$file->isDir() && $file->getExtension() == 'php' && $file->getSize() > 0)
+            if (! $file->isDir() && $file->getExtension() == 'php' && $file->getSize() > 0) {
                 $result[] = $file;
+            }
         }
-
 
         if ($prioritization) {
             //sort the files, with files ending with "ServiceProvider" or "Facade" at the top,
             //to increase the speed at which we find those classes.
-            usort($result, function($a,$b) {
-                if (ends_with($a, 'ServiceProvider.php') || ends_with($a, 'Facade.php'))
+            usort($result, function ($a, $b) {
+                if (ends_with($a, 'ServiceProvider.php') || ends_with($a, 'Facade.php')) {
                     return -1;
-                if (ends_with($b, 'ServiceProvider.php') || ends_with($b, 'Facade.php'))
+                }
+                if (ends_with($b, 'ServiceProvider.php') || ends_with($b, 'Facade.php')) {
                     return 1;
-                return strcmp($a,$b);
+                }
+
+                return strcmp($a, $b);
             });
         }
 
@@ -81,13 +79,13 @@ class PackageFileLocator
 
     public function getFiles()
     {
-       return $this->files;
+        return $this->files;
     }
 
     public function clearFiles()
     {
         $this->files = new PackageFileList;
+
         return $this;
     }
-
 }

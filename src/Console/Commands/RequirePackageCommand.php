@@ -3,8 +3,6 @@
 namespace LaravelPackageManager\Console\Commands;
 
 use Illuminate\Console\Command;
-use LaravelPackageManager\Support\Output;
-use LaravelPackageManager\Support\UserPrompt;
 use LaravelPackageManager\Packages\PackageRequirer;
 
 class RequirePackageCommand extends Command
@@ -43,8 +41,8 @@ class RequirePackageCommand extends Command
     public function handle()
     {
         $options = [
-            'register-only'=>($this->hasOption('register-only')?$this->option('register-only'):null),
-            'dev' => ($this->hasOption('dev')?$this->option('dev'):null),
+            'register-only'=>($this->hasOption('register-only') ? $this->option('register-only') : null),
+            'dev' => ($this->hasOption('dev') ? $this->option('dev') : null),
         ];
 
         $requirer = new PackageRequirer($this);

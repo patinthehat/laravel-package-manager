@@ -7,7 +7,6 @@ use LaravelPackageManager\Exceptions\InvalidExternalCommandException;
 
 class RunExternalCommand
 {
-
     protected $command;
 
     public function __construct($command)
@@ -32,10 +31,9 @@ class RunExternalCommand
 
     protected function validateCommand()
     {
-        if (!is_string($this->command) || strlen(trim($this->command)) == 0)
+        if (! is_string($this->command) || strlen(trim($this->command)) == 0) {
             throw new InvalidExternalCommandException('Invalid command string.');
-
+        }
         return true;
     }
-
 }

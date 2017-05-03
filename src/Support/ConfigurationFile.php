@@ -23,17 +23,17 @@ class ConfigurationFile
     }
 
     /**
-     * Validate the filename generated from the $name provided
+     * Validate the filename generated from the $name provided.
      * @throws \LaravelPackageManager\Exceptions\ConfigurationFileNotFoundException
-     * @return boolean
+     * @return bool
      */
     protected function validateFilename()
     {
         $filename = $this->filename();
 
-        if (!file_exists($filename))
+        if (! file_exists($filename)) {
             throw ConfigurationFileNotFoundException('File not found: '.$filename);
-
+        }
         return true;
     }
 
@@ -65,5 +65,4 @@ class ConfigurationFile
     {
         return file_put_contents($this->filename(), $contents);
     }
-
 }

@@ -10,12 +10,12 @@ use Illuminate\Console\Command;
 class Output
 {
     protected $command;
-    
+
     public function __construct(Command $command)
     {
         $this->command = $command;
     }
-    
+
     /**
      * Handle calls to various Command methods.
      * @param string $name
@@ -24,8 +24,8 @@ class Output
      */
     public function __call($name, $params)
     {
-        if (in_array($name, ['info', 'comment', 'line', 'error', 'confirm']))
+        if (in_array($name, ['info', 'comment', 'line', 'error', 'confirm'])) {
             return $this->command->$name($params[0]);
+        }
     }
-    
 }
