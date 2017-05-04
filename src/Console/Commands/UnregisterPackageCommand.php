@@ -17,7 +17,7 @@ class UnregisterPackageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'package:unregister {package_name} ';
+    protected $signature = 'package:unregister {package}';
 
     /**
      * The console command description.
@@ -26,8 +26,18 @@ class UnregisterPackageCommand extends Command
      */
     protected $description = 'Unregister service providers and facades from a previously registered package.';
 
+    /**
+     * The output helper.
+     *
+     * @var \LaravelPackageManager\Support\Output
+     */
     protected $output;
 
+    /**
+     * The user prompt helper.
+     *
+     * @var \LaravelPackageManager\Support\UserPrompt
+     */
     protected $userPrompt;
 
     /**
@@ -38,6 +48,7 @@ class UnregisterPackageCommand extends Command
     public function __construct()
     {
         parent::__construct();
+
         $this->output = new Output($this);
         $this->userPrompt = new UserPrompt($this->output);
     }
@@ -49,7 +60,7 @@ class UnregisterPackageCommand extends Command
      */
     public function handle()
     {
-        $packageName = $this->argument('package_name');
+        $packageName = $this->argument('package');
 
         $package = new Package($packageName);
 
