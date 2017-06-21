@@ -49,7 +49,7 @@ class PackageRequirer
         $package = new Package($packageName);
         if (! $package->isInstalled() || ! $options['register-only']) { // (is_null($options['register-only']) || $options['register-only'] == false)) {
             $installer = new PackageInstaller;
-            $installer->install($package, $this->options->hasOption('dev')); // in_array('dev', $options));
+            $installer->install($package, $options['dev']); // in_array('dev', $options));
         }
 
         $locator = new PackageFileLocator($package);
